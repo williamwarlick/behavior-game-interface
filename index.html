@@ -31,7 +31,26 @@
     <script>
         const tableBody = document.getElementById("table-body");
 
-        // ... (rest of your JavaScript code)
+// Generate table rows and cells
+for (let row = 1; row <= 18; row++) {
+    const newRow = document.createElement("tr");
+    for (let col = 1; col <= 6; col++) {
+        const newCell = document.createElement("td");
+        newCell.innerHTML = '<div class="color-block" style="background-color: ' + getRandomColor() + ';"></div>';
+        newRow.appendChild(newCell);
+    }
+    tableBody.appendChild(newRow);
+}
+
+// Generate a random color in hexadecimal format
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
     </script>
 
     <!-- Add Bootstrap JS and Popper.js (required for certain Bootstrap features) -->
