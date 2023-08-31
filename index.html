@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>18x6 Table Example</title>
+</head>
+<body>
+    <h1>Table Example</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Header 1</th>
+                <th>Header 2</th>
+                <th>Header 3</th>
+                <th>Header 4</th>
+                <th>Header 5</th>
+                <th>Header 6</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+        </tbody>
+    </table>
+
+    <script>
+        const tableBody = document.getElementById("table-body");
+
+        // Generate table rows and cells
+        for (let row = 1; row <= 18; row++) {
+            const newRow = document.createElement("tr");
+            for (let col = 1; col <= 6; col++) {
+                const newCell = document.createElement("td");
+                newCell.textContent = `Row ${row}, Col ${col}`;
+                newRow.appendChild(newCell);
+            }
+            tableBody.appendChild(newRow);
+        }
+    </script>
+</body>
+</html>
