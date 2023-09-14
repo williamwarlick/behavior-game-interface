@@ -1,5 +1,6 @@
 const tableBody = document.getElementById("table-body");
 var currentGame;
+var currentMove;
 
 function table_setup(){
     // Generate table rows and cells
@@ -48,6 +49,8 @@ function getGame(){
             break; // Exit the loop once a match is found
         }
     }
+    //set currentmove to 0
+    currentMove = 0;
     //call loadgame
     loadgame()
 }
@@ -57,11 +60,29 @@ function loadgame(){
     var cellId = 0;
     colors = currentGame.config
     for (var i = 0; i < colors.length; i++) {
-        var color = colors[cellId]
+        var color = colors[cellId];
         var block = document.getElementById(cellId);
         block.setAttribute('style', 'background-color:' + color + ';')
         cellId++
     }
+}
+
+function nextMove(){
+    move = currentMove;
+    orig_id = currentGame['move_ids'][move][0];
+    if (orig_id != '999'){
+        orig_element = document.getElementById(orig_id);
+        bg_color = orig_element.style.backgroundColor;
+        var orig_color = bg_color.replace("background-color:", "").trim();
+
+        new_id = currentGame['move_ids'][move][1];
+        new_element = document.getElementById(new_id);
+
+        new_element.style.backgroundColor = orig_color;
+        orig_element.style.backgroundColor = "white";
+        
+    }
+    currentMove++;
 }
 
 function load_options(){
@@ -112,6 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
     load_options();
 
     document.getElementById('loadbutton').addEventListener('click', getGame);
+    document.getElementById('reset_button').addEventListener('click', getGame);
+    document.getElementById('next_move_button').addEventListener('click', nextMove);
 
     const optionIdElements = document.querySelectorAll(".option_id_item");
 
