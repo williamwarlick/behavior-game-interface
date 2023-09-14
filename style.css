@@ -5,10 +5,11 @@
 }
 
 .table th, .table td {
-    padding: 8px;
-    border: 0px solid #ccc;
+    padding: 3px;
+    border: none;
     text-align: center;
 }
+
 /* Add vertical lines between each set of 3 columns */
 .table td:nth-child(3n) {
     border-right: 3px solid #ccc;
@@ -38,7 +39,7 @@
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     height: auto;
-    max-height: 300px;
+    max-height: 500px;
     overflow-x: hidden;
   }
 
