@@ -11,54 +11,63 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="mb-4">Game Display</h1>
         <div class="container mt-5"></div>
             <div class="d-flex justify-content-center">
-                <div class="dropdown">
+                <div class="dropdown  m-4">
                     <button class=" btn btn-primary btn-large" id="game_id_button">Player ID ⏷</button>
                     <div class="dropdown-content" id="game_id_dropdown">
                     </div>
                 </div>
-                <div class="dropdown">
+                <div class="dropdown  m-4">
                     <button class="btn btn-primary" id="goal_type_button">Goal Type ⏷</button>
                     <div class="dropdown-content" id="game_goal_dropdown">
                     </div>
                 </div>
-                <button class="btn btn-success" id="loadbutton">Load</button>
+                
             </div>
-        </div>
-        
-        <table class="table">
-            <tbody id="table-body">
-            </tbody>
-            <tbody>
-                <tr>
-                    <td colspan="3"><h4>A1</h4></td>
-                    <td colspan="3"><h4>A2</h4></td>
-                    <td colspan="3"><h4>B1</h4></td>
-                    <td colspan="3"><h4>B2</h4></td>
-                    <td colspan="3"><h4>C1</h4></td>
-                    <td colspan="3"><h4>C2</h4></td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td colspan="6"><h3>A</h3></td>
-                    <td colspan="6"><h3>B</h3></td>
-                    <td colspan="6"><h3>C</h3></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="container mt-5">
             <div class="d-flex justify-content-center">
-                <div class="btn-group" role="group" aria-label="Button Group">
-                    <button id="reset_button" type="button" class="btn btn-primary">Reset</button>
-                    <button id="undo_move_button" type="button" class="btn btn-primary">Undo Move</button>
-                    <button id="next_move_button" type="button" class="btn btn-primary">Next Move</button>
+                <div class="card p-4" id="infopanel">
+                    <div id="current-player-box"></div>
+                    <div id="current-move-box"></div>
+                    <div id="current-goal-box"></div>
+                    <button id="change-game-button" type="button" style="width: 12rem;" class="btn btn-secondary">Change Game</button>
+                    <button id="random-game-button" type="button" style="width: 12rem;" class="btn btn-secondary">Random Game</button>
+                </div>
+            </div>    
+        </div>
+        <div class="d-flex justify-content-center">
+            <table class="table">
+                <tbody id="table-body">
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td colspan="3"><h4>A1</h4></td>
+                        <td colspan="3"><h4>A2</h4></td>
+                        <td colspan="3"><h4>B1</h4></td>
+                        <td colspan="3"><h4>B2</h4></td>
+                        <td colspan="3"><h4>C1</h4></td>
+                        <td colspan="3"><h4>C2</h4></td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td colspan="6"><h3>A</h3></td>
+                        <td colspan="6"><h3>B</h3></td>
+                        <td colspan="6"><h3>C</h3></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+            <div class="container mt-5">
+                <div class="d-flex justify-content-center">
+                    <div class="btn-group" role="group" aria-label="Button Group">
+                        <button id="reset_button" type="button" class="btn btn-primary">Reset</button>
+                        <button id="undo_move_button" type="button" class="btn btn-primary">Undo Move</button>
+                        <button id="next_move_button" type="button" class="btn btn-primary">Next Move</button>
+                    </div>
                 </div>
             </div>
-        </div>
-
+    
 
     </div>
     <script src="game.js" defer></script>

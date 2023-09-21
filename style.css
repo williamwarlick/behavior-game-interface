@@ -1,13 +1,26 @@
 .color-block {
-    width: 50px;
-    height: 50px;
+    width: 30px;
+    height: 30px;
+
     display: inline-block;
 }
 
+.table{
+  width: fit-content;
+  height: fit-content;
+}
+.td{
+  height: fit-content;
+  border: none;
+}
+
 .table th, .table td {
-    padding: 3px;
     border: none;
     text-align: center;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 1px;
 }
 
 /* Add vertical lines between each set of 3 columns */

@@ -1,6 +1,9 @@
 const tableBody = document.getElementById("table-body");
 var currentGame;
 var currentMove;
+var idSelectInactive;
+var typeSelectInactive;
+
 
 function table_setup(){
     // Generate table rows and cells
@@ -25,6 +28,7 @@ function recordGameId(gameId_str){
     gameIdButton = document.getElementById("game_id_button");
     gameIdButton.textContent = gameId;
     console.log("recording : " + gameId)
+    getGame()
 }
 
 function recordGoalType(goal_type_str){
@@ -34,6 +38,7 @@ function recordGoalType(goal_type_str){
     goalTypeButton = document.getElementById("goal_type_button");
     goalTypeButton.textContent = goalType;
     console.log("recording type: " + goalType)
+    getGame()
 }
 
 function getGame(){
@@ -53,6 +58,8 @@ function getGame(){
     currentMove = 0;
     //call loadgame
     loadgame()
+    updateInfoPanel();
+
 }
 
 function loadgame(){
@@ -68,21 +75,113 @@ function loadgame(){
 }
 
 function nextMove(){
-    move = currentMove;
-    orig_id = currentGame['move_ids'][move][0];
-    if (orig_id != '999'){
-        orig_element = document.getElementById(orig_id);
-        bg_color = orig_element.style.backgroundColor;
-        var orig_color = bg_color.replace("background-color:", "").trim();
+    if (currentMove + 1 <= currentGame['total_moves']){
+        move = currentMove;
+        orig_id = currentGame['move_ids'][move][0];
+        if (orig_id != '999'){
+            orig_element = document.getElementById(orig_id);
+            bg_color = orig_element.style.backgroundColor;
+            var orig_color = bg_color.replace("background-color:", "").trim();
 
-        new_id = currentGame['move_ids'][move][1];
-        new_element = document.getElementById(new_id);
+            new_id = currentGame['move_ids'][move][1];
+            new_element = document.getElementById(new_id);
+            console.log("new_id", new_id)
+            new_element.style.backgroundColor = orig_color;
+            orig_element.style.backgroundColor = "white";
+            
+        }
+        //disable buttons on move
+        var button = document.getElementById("game_id_button");
+        button.disabled = true;
+        button = document.getElementById("goal_type_button");
+        button.disabled = true;
+        //enable game change button
+        var b = document.getElementById('change-game-button');
+        b.disabled = false;
 
-        new_element.style.backgroundColor = orig_color;
-        orig_element.style.backgroundColor = "white";
-        
+        currentMove++;
+        updateInfoPanel();
     }
-    currentMove++;
+}
+
+function updateInfoPanel(){
+    // Current player
+    if (currentMove % 2 == 1){
+        content = "Current player: Architect";
+    } else {
+        content = "Current player:   Helper";
+    }
+    var h4Element = document.createElement("h4");
+    h4Element.textContent = content;
+    var box = document.getElementById("current-player-box");
+    // Append to the div and empty previous 
+    box.innerHTML = "";
+    box.appendChild(h4Element);
+
+
+    //Current move
+    var h4Element = document.createElement("h4");
+    h4Element.textContent = "Current move: " + currentMove;
+    var box = document.getElementById("current-move-box");
+    // Append to the div and empty previous 
+    box.innerHTML = "";
+    box.appendChild(h4Element);
+
+    //Current goal
+    var h4Element = document.createElement("h4");
+    h4Element.textContent = "Current goal: " + currentGame['goal'];
+    var box = document.getElementById("current-goal-box");
+    // Append to the div and empty previous 
+    box.innerHTML = "";
+    box.appendChild(h4Element);
+
+}
+
+function previousMove(){
+    if (currentMove  > 0 ){
+        currentMove--;
+        move = currentMove;
+        orig_id = currentGame['move_ids'][move][1];
+        if (orig_id != '999'){
+            orig_element = document.getElementById(orig_id);
+            bg_color = orig_element.style.backgroundColor;
+            var orig_color = bg_color.replace("background-color:", "").trim();
+    
+            new_id = currentGame['move_ids'][move][0];
+            new_element = document.getElementById(new_id);
+            console.log("new_id", new_id)
+            new_element.style.backgroundColor = orig_color;
+            orig_element.style.backgroundColor = "white";
+            
+        }
+        updateInfoPanel();
+    }
+}
+
+function gameChange(){
+    //enable game option select buttons
+   var button = document.getElementById("game_id_button");
+   button.disabled = false;
+   button = document.getElementById("goal_type_button");
+   button.disabled = false;
+   //diable game change button
+   button = document.getElementById("change-game-button");
+   button.disabled = true;
+   //empty info panels
+   var box = document.getElementById("current-player-box");
+   box.innerHTML = "";
+   var box = document.getElementById("current-move-box");
+   box.innerHTML = "";
+   var box = document.getElementById("current-goal-box");
+   box.innerHTML = "";
+
+    // reset selection buttons
+   var box = document.getElementById("goal_type_button");
+   box.innerHTML = "Goal Type ⏷";
+   var box = document.getElementById("game_id_button");
+   box.innerHTML = "Player ID ⏷";
+
+
 }
 
 function load_options(){
@@ -131,10 +230,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // Your code to run when the document is loaded
     table_setup();
     load_options();
+    //disable game change initally
+    var b = document.getElementById('change-game-button');
+    b.disabled = true;
 
-    document.getElementById('loadbutton').addEventListener('click', getGame);
     document.getElementById('reset_button').addEventListener('click', getGame);
     document.getElementById('next_move_button').addEventListener('click', nextMove);
+    document.getElementById('undo_move_button').addEventListener('click', previousMove);
+    document.getElementById('change-game-button').addEventListener('click', gameChange);
+    //document.getElementById('random-game-button').addEventListener('click', gameRandom);
+
 
     const optionIdElements = document.querySelectorAll(".option_id_item");
 
