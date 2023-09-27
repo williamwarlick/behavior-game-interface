@@ -41,6 +41,25 @@ function recordGoalType(goal_type_str){
     getGame()
 }
 
+function gameRandom(){
+    var id_arr = options["game_ids"]
+    const randomIndex = Math.floor(Math.random() * id_arr.length);
+    var random_game = id_arr[randomIndex]
+    var goal_arr = options['goal_types']
+    const randomTypeIndex = Math.floor(Math.random() * goal_arr.length);
+    var random_goal = goal_arr[randomTypeIndex]
+
+    goalTypeButton = document.getElementById("goal_type_button");
+    goalTypeButton.textContent = random_goal;
+
+    gameIdButton = document.getElementById("game_id_button");
+    gameIdButton.textContent = random_game;
+
+    recordGameId(random_game)
+    recordGoalType(random_goal)
+}
+
+
 function getGame(){
     //load the json for a game after load is pressed
     const id_button = document.getElementById("game_id_button");
@@ -92,12 +111,14 @@ function nextMove(){
         }
         //disable buttons on move
         var button = document.getElementById("game_id_button");
-        button.disabled = true;
+        button.style.display = 'none';
         button = document.getElementById("goal_type_button");
-        button.disabled = true;
+        button.style.display = 'none';
+        button = document.getElementById("random-game-button");
+        button.style.display = 'none';
         //enable game change button
         var b = document.getElementById('change-game-button');
-        b.disabled = false;
+        b.style.display = '';
 
         currentMove++;
         updateInfoPanel();
@@ -106,7 +127,7 @@ function nextMove(){
 
 function updateInfoPanel(){
     // Current player
-    if (currentMove % 2 == 1){
+    if (currentMove % 2 == 0){
         content = "Current player: Architect";
     } else {
         content = "Current player:   Helper";
@@ -161,12 +182,14 @@ function previousMove(){
 function gameChange(){
     //enable game option select buttons
    var button = document.getElementById("game_id_button");
-   button.disabled = false;
+   button.style.display = '';
    button = document.getElementById("goal_type_button");
-   button.disabled = false;
+   button.style.display = '';
+   button = document.getElementById("random-game-button");
+   button.style.display = '';
    //diable game change button
    button = document.getElementById("change-game-button");
-   button.disabled = true;
+   button.style.display = 'none';
    //empty info panels
    var box = document.getElementById("current-player-box");
    box.innerHTML = "";
@@ -230,15 +253,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Your code to run when the document is loaded
     table_setup();
     load_options();
-    //disable game change initally
-    var b = document.getElementById('change-game-button');
-    b.disabled = true;
+
 
     document.getElementById('reset_button').addEventListener('click', getGame);
     document.getElementById('next_move_button').addEventListener('click', nextMove);
     document.getElementById('undo_move_button').addEventListener('click', previousMove);
     document.getElementById('change-game-button').addEventListener('click', gameChange);
-    //document.getElementById('random-game-button').addEventListener('click', gameRandom);
+    document.getElementById('random-game-button').addEventListener('click', gameRandom);
 
 
     const optionIdElements = document.querySelectorAll(".option_id_item");
