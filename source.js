@@ -13,7 +13,7 @@ function table_setup(){
         for (let col = 1; col <= 18; col++) {
             const newCell = document.createElement("td");
             var color = "white"
-            newCell.innerHTML = '<div id='+cellId+' class="color-block" style="background-color:' + color + ';"></div>';
+            newCell.innerHTML = '<div id='+cellId+' class="color-block" style="left:0px; top:0px; background-color:' + color + ';"></div>';
             newRow.appendChild(newCell);
             cellId++
         }
@@ -98,6 +98,7 @@ function nextMove(){
         move = currentMove;
         orig_id = currentGame['move_ids'][move][0];
         if (orig_id != '999'){
+            
             orig_element = document.getElementById(orig_id);
             bg_color = orig_element.style.backgroundColor;
             var orig_color = bg_color.replace("background-color:", "").trim();
@@ -105,9 +106,17 @@ function nextMove(){
             new_id = currentGame['move_ids'][move][1];
             new_element = document.getElementById(new_id);
             console.log("new_id", new_id)
-            new_element.style.backgroundColor = orig_color;
-            orig_element.style.backgroundColor = "white";
-            
+            //call animation
+            animateMove(orig_id, new_id)
+            //change colors
+            setTimeout(function () {
+                
+                new_element.style.backgroundColor = orig_color;
+                orig_element.style.backgroundColor = "white";
+                //move div back to where it should be
+                undo_animation(orig_id)
+              }, 1100);
+            orig_element.style.display = 'block';
         }
         //disable buttons on move
         var button = document.getElementById("game_id_button");
@@ -150,12 +159,28 @@ function updateInfoPanel(){
 
     //Current goal
     var h4Element = document.createElement("h4");
-    h4Element.textContent = "Current goal: " + currentGame['goal'];
+    h4Element.textContent = "Current goal: " + niceNames(currentGame['goal']);
     var box = document.getElementById("current-goal-box");
     // Append to the div and empty previous 
     box.innerHTML = "";
     box.appendChild(h4Element);
 
+}
+
+// make the goal names more readable
+function niceNames(str){
+    if (str.includes("cover")){
+        str = str.replace("all", "")
+        return str.replace("cover", "cover all")
+    } else if (str.includes("fill")) {
+        return str.replace("nocolor", '')
+    } else if (str.includes("move")){
+        str = str.replace("A", "to A")
+        str = str.replace("B", "to A")
+        str = str.replace("C", "to C")
+        return str
+    } else {return str.replace("nocolor","")}
+    
 }
 
 function previousMove(){
@@ -200,9 +225,9 @@ function gameChange(){
 
     // reset selection buttons
    var box = document.getElementById("goal_type_button");
-   box.innerHTML = "Goal Type ⏷";
+   box.innerHTML = "Selet Goal Type ⏷";
    var box = document.getElementById("game_id_button");
-   box.innerHTML = "Player ID ⏷";
+   box.innerHTML = "Select Player ID ⏷";
 
 
 }
@@ -280,5 +305,44 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+
+function animateMove(id1, id2) {
+    var source_element = document.getElementById(id1);
+    var destination_element = document.getElementById(id2);
+
+    // store the x,y coordinates of the target
+    var xT = destination_element.offsetLeft;
+    var yT = destination_element.offsetTop;
+    destination_element.style.display = 'none';
+
+    // store the elements coordinate
+    var xE = source_element.offsetLeft;
+    var yE = source_element.offsetTop;
+
+    source_element.style.left = 0 + 'px';
+    source_element.style.top = 0 + 'px';
+
+    setTimeout(function() {
+        //set to destination position
+        source_element.style.left = xT - xE + 'px';
+        source_element.style.top = yT - yE + 'px';
+    }, 1);
+    setTimeout(function () {
+        destination_element.style.display = 'block';
+        source_element.style.display = 'none';
+      }, 1000);
+    
+}
+
+function undo_animation(id1){
+    var source_element = document.getElementById(id1);
+    source_element.style.display = 'none'
+    source_element.style.left = 0 + 'px';
+    source_element.style.top = 0 + 'px';
+    setTimeout(function () {
+        source_element.style.display = 'block';
+      }, 1100);
+}
 
 

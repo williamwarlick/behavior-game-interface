@@ -1,8 +1,9 @@
 .color-block {
     width: 30px;
     height: 30px;
-
+    position: relative;
     display: inline-block;
+    transition: left 1s ease-out, top 1s ease-out;
 }
 
 .table{
@@ -92,6 +93,7 @@
     transform: translate(0, 0);
   }
   to {
-    transform: translate(30px, -20px);
+    transform: translate(0px,-200px);
   }
 }
+
