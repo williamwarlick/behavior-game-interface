@@ -3,6 +3,8 @@ var currentGame;
 var currentMove;
 var idSelectInactive;
 var typeSelectInactive;
+var wasPass;
+var topZ;
 
 
 function table_setup(){
@@ -75,6 +77,7 @@ function getGame(){
     }
     //set currentmove to 0
     currentMove = 0;
+
     //call loadgame
     loadgame()
     //updateInfoPanel();
@@ -116,7 +119,7 @@ function nextMove(){
         move = currentMove;
         orig_id = currentGame['move_ids'][move][0];
         if (orig_id != '999'){
-            
+            wasPass = false;
             orig_element = document.getElementById(orig_id);
             bg_color = orig_element.style.backgroundColor;
             var orig_color = bg_color.replace("background-color:", "").trim();
@@ -135,6 +138,8 @@ function nextMove(){
                 undo_animation(orig_id)
               }, 1100);
             orig_element.style.display = 'block';
+        } else {
+            wasPass = true;
         }
         //disable buttons on move
         var button = document.getElementById("game_id_button");
@@ -155,9 +160,9 @@ function nextMove(){
 function updateInfoPanel(){
     // Current player
     if (currentMove % 2 == 1){
-        content ='Last move by: <span class="badge bg-warning">Architect</span>';
+        content ='Last move by: <span class="badge bg-success">Architect</span>';
     } else {
-        content = 'Last move by:  <span class="badge bg-info">Helper</span>';
+        content = 'Last move by:  <span class="badge bg-danger">Helper</span>';
     }
     var h4Element = document.createElement("h4");
     h4Element.innerHTML = content;
@@ -169,7 +174,11 @@ function updateInfoPanel(){
 
     //Current move
     var h4Element = document.createElement("h4");
-    h4Element.textContent = 'Move #: ' + currentMove;
+    if (!wasPass){
+        h4Element.textContent = 'Move # ' + currentMove;
+    } else {
+        h4Element.innerHTML = 'Move # ' + currentMove + ' <span class="badge bg-info">PASS</span>';
+    }
     var box = document.getElementById("current-move-box");
     // Append to the div and empty previous 
     box.innerHTML = "";
@@ -179,6 +188,20 @@ function updateInfoPanel(){
     var h4Element = document.createElement("h4");
     h4Element.textContent = "Current goal: " + niceNames(currentGame['goal']);
     var box = document.getElementById("current-goal-box");
+
+    // Append to the div and empty previous 
+    box.innerHTML = "";
+    box.appendChild(h4Element);
+
+    //Current game
+    var newh4Element = document.createElement("h4");
+    newh4Element.textContent = "Current ID: " + (currentGame['id']);
+    var newbox = document.getElementById("current-game-box");
+
+    // Append to the div and empty previous 
+    newbox.innerHTML = "";
+    newbox.appendChild(newh4Element);
+
     // Append to the div and empty previous 
     box.innerHTML = "";
     box.appendChild(h4Element);
@@ -356,7 +379,7 @@ function animateMove(id1, id2) {
     // store the x,y coordinates of the target
     var xT = destination_element.offsetLeft;
     var yT = destination_element.offsetTop;
-    destination_element.style.display = 'none';
+    //destination_element.style.display = 'block';
 
     // store the elements coordinate
     var xE = source_element.offsetLeft;
@@ -365,15 +388,19 @@ function animateMove(id1, id2) {
     source_element.style.left = 0 + 'px';
     source_element.style.top = 0 + 'px';
 
+    source_element.style.zIndex = "999";
     setTimeout(function() {
         //set to destination position
         source_element.style.left = xT - xE + 'px';
         source_element.style.top = yT - yE + 'px';
     }, 1);
     setTimeout(function () {
-        destination_element.style.display = 'block';
-        source_element.style.display = 'none';
-      }, 1000);
+        //source_element.style.display = 'none';
+        
+        setTimeout(function() {
+            //destination_element.style.display = 'block';
+        }, 100);
+      }, 750);
     
 }
 
@@ -384,6 +411,7 @@ function undo_animation(id1){
     source_element.style.top = 0 + 'px';
     setTimeout(function () {
         source_element.style.display = 'block';
+        source_element.style.zIndex = "100";
       }, 1000);
 }
 
