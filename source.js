@@ -77,7 +77,16 @@ function getGame(){
     currentMove = 0;
     //call loadgame
     loadgame()
-    updateInfoPanel();
+    //updateInfoPanel();
+
+    var help = document.getElementById("inithelp");
+    help.style.display = 'none';
+
+    // var controls = document.getElementById("ingamecontrols");
+    // controls.style.display = 'block';
+
+    // var t = document.getElementById("gametable");
+    // t.style.display = 'block';
 
 }
 
@@ -89,6 +98,15 @@ function loadgame(){
         var color = colors[cellId];
         var block = document.getElementById(cellId);
         block.setAttribute('style', 'background-color:' + color + ';')
+        cellId++
+    }
+}
+ //load white cells
+function cleargame(){
+    var cellId = 0;
+    for (var i = 0; i < colors.length; i++) {
+        var block = document.getElementById(cellId);
+        block.setAttribute('style', 'background-color:white;')
         cellId++
     }
 }
@@ -136,13 +154,13 @@ function nextMove(){
 
 function updateInfoPanel(){
     // Current player
-    if (currentMove % 2 == 0){
-        content = "Current player: Architect";
+    if (currentMove % 2 == 1){
+        content ='Last move by: <span class="badge bg-warning">Architect</span>';
     } else {
-        content = "Current player:   Helper";
+        content = 'Last move by:  <span class="badge bg-info">Helper</span>';
     }
     var h4Element = document.createElement("h4");
-    h4Element.textContent = content;
+    h4Element.innerHTML = content;
     var box = document.getElementById("current-player-box");
     // Append to the div and empty previous 
     box.innerHTML = "";
@@ -151,7 +169,7 @@ function updateInfoPanel(){
 
     //Current move
     var h4Element = document.createElement("h4");
-    h4Element.textContent = "Current move: " + currentMove;
+    h4Element.textContent = 'Move #: ' + currentMove;
     var box = document.getElementById("current-move-box");
     // Append to the div and empty previous 
     box.innerHTML = "";
@@ -164,6 +182,10 @@ function updateInfoPanel(){
     // Append to the div and empty previous 
     box.innerHTML = "";
     box.appendChild(h4Element);
+
+    //show info panel
+    panel = document.getElementById("infopanel");
+    panel.style.display = 'block';
 
 }
 
@@ -229,6 +251,13 @@ function gameChange(){
    var box = document.getElementById("game_id_button");
    box.innerHTML = "Select Player ID ⏷";
 
+    //hide info panel
+    panel = document.getElementById("infopanel");
+    panel.style.display = 'none';
+
+    //clear game
+    cleargame();
+
 
 }
 
@@ -274,10 +303,23 @@ function load_options(){
     }
 }
 
+//on load do this
 document.addEventListener('DOMContentLoaded', function () {
-    // Your code to run when the document is loaded
+    //load table and options
     table_setup();
     load_options();
+
+    //hide table
+    // var t = document.getElementById("gametable");
+    // t.style.display = 'none';
+
+    //hide info panel
+    panel = document.getElementById("infopanel");
+    panel.style.display = 'none';
+
+    //hide controls
+    // var controls = document.getElementById("ingamecontrols");
+    // controls.style.display = 'block';
 
 
     document.getElementById('reset_button').addEventListener('click', getGame);
@@ -342,7 +384,7 @@ function undo_animation(id1){
     source_element.style.top = 0 + 'px';
     setTimeout(function () {
         source_element.style.display = 'block';
-      }, 1100);
+      }, 1000);
 }
 
 
