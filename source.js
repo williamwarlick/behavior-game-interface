@@ -63,6 +63,10 @@ function gameRandom(){
 
 
 function getGame(){
+    //enable button
+    var b = document.getElementById("goal_type_button");
+    b.classList.remove("disabled");
+
     //load the json for a game after load is pressed
     const id_button = document.getElementById("game_id_button");
     const type_button = document.getElementById("goal_type_button");
@@ -103,6 +107,13 @@ function loadgame(){
         block.setAttribute('style', 'background-color:' + color + ';')
         cellId++
     }
+    // make table and controls visible
+    var tRow = document.getElementById("gamerow")
+    tRow.style.display = 'flex';
+
+    var cRow = document.getElementById("controlrow")
+    cRow.style.display = 'flex';
+
 }
  //load white cells
 function cleargame(){
@@ -357,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Loop through each element and add a click event listener
     optionIdElements.forEach(function(element) {
         element.addEventListener("click", function() {
-            recordGameId(element.id)
+            recordGameId(element.id);
         });
     });
 

@@ -32,7 +32,7 @@
             <div class="col-7">
                 <div class="card p-3 bg-light initCard mt-1" id="inithelp">
                     <h4 class="display-5">Getting Started</h4>
-                    <h4>Select a <span class="badge bg-primary">Player ID</span> and <span class="badge bg-primary">Goal Type</span> below. Or, click <span class="badge bg-secondary">Random Game</span>
+                    <h4>Select a <span class="font-weight-bold">Player ID</span> and <span class="font-weight-bold">Goal Type</span> below. Or, click <span class="font-weight-bold">Random Game</span>
                        to see a randomly chosen game.</h4>
                 </div>
                 <!-- game selection controls -->
@@ -47,16 +47,16 @@
                             <button id="change-game-button" type="button" style="display: none;width: 12rem;" class="btn btn-secondary m-4">Change Game</button>
             
                             <div class="dropdown  m-4">
-                                <button class="btn btn-primary" id="goal_type_button">Select Goal Type ⏷</button>
+                                <button class="btn btn-primary disabled" id="goal_type_button">Select Goal Type ⏷</button>
                                 <div class="dropdown-content" id="game_goal_dropdown">
                                 </div>
                             </div>
-                            <button id="random-game-button" type="button" style="height: fit-content;" class="btn btn-secondary btn-large m-4">Random Game</button>
+                            <button id="random-game-button" type="button" style="height: fit-content;" class="btn btn-success btn-large m-4">Random Game</button>
                         </div>   
                     </div>
                 </div>
                 <!-- game table -->
-                <div class="row">
+                <div class="row" id="gamerow" style="display: none;">
                     <div class="d-flex justify-content-center">
                         <table class="table" id="gametable">
                             <tbody id="table-body">
@@ -83,14 +83,14 @@
                 </div>
 
                 <!-- Game step controls -->
-                <div class="row">
+                <div class="row" id="controlrow" style="display: none;">
                     <div class="container mt-5">
                         <div class="d-flex justify-content-center">
                             <div class="row" id="passBadgeHolder"></div>
                             <div class="btn-group" role="group" aria-label="Button Group"  id="ingamecontrols">
-                                <button id="reset_button" type="button" class="btn btn-danger">Reset</button>
-                                <button id="undo_move_button" type="button" class="btn btn-primary">Undo Move</button>
-                                <button id="next_move_button" type="button" class="btn btn-primary">Next Move</button>
+                                <button id="reset_button" type="button" class="btn btn-outline-danger">Reset</button>
+                                <button id="undo_move_button" type="button" class="btn btn-outline-primary">Undo Move</button>
+                                <button id="next_move_button" type="button" class="btn btn-outline-primary">Next Move</button>
                             </div>
                         </div>
                     </div>
