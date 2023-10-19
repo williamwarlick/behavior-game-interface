@@ -111,6 +111,7 @@ function getGame(){
     updateInfoPanel()
     panel = document.getElementById("topCard");
     panel.style.display = 'block';
+    coolDown = false;
 
     // var controls = document.getElementById("ingamecontrols");
     // controls.style.display = 'block';
@@ -198,32 +199,33 @@ function nextMove(){
 }
 
 function updateInfoPanel(){
-    // Current player
-    if (currentMove % 2 == 1){
-        content ='Last move by: <span class="badge bg-success">Architect</span>';
-    } else {
-        content = 'Last move by:  <span class="badge bg-danger">Helper</span>';
+    if (currentMove > 0){
+        // Current player
+        if (currentMove % 2 == 1){
+            content ='Last move by: <span class="badge bg-success">Architect</span>';
+        } else {
+            content = 'Last move by:  <span class="badge bg-danger">Helper</span>';
+        }
+        if (wasPass){
+            content = content + ' <span class="badge bg-info">PASS</span>'
+        }
+        var h4Element = document.createElement("h4");
+        h4Element.innerHTML = content;
+        var box = document.getElementById("current-player-box");
+        // Append to the div and empty previous 
+        box.innerHTML = "";
+        box.appendChild(h4Element);
+
+
+        //Current move
+        var h4Element = document.createElement("h4");
+        h4Element.textContent = 'Move # ' + currentMove;
+        
+        var box = document.getElementById("current-move-box");
+        // Append to the div and empty previous 
+        box.innerHTML = "";
+        box.appendChild(h4Element);
     }
-    if (wasPass){
-        content = content + ' <span class="badge bg-info">PASS</span>'
-    }
-    var h4Element = document.createElement("h4");
-    h4Element.innerHTML = content;
-    var box = document.getElementById("current-player-box");
-    // Append to the div and empty previous 
-    box.innerHTML = "";
-    box.appendChild(h4Element);
-
-
-    //Current move
-    var h4Element = document.createElement("h4");
-    h4Element.textContent = 'Move # ' + currentMove;
-    
-    var box = document.getElementById("current-move-box");
-    // Append to the div and empty previous 
-    box.innerHTML = "";
-    box.appendChild(h4Element);
-
     //Current goal
     var h4Element = document.createElement("h4");
     h4Element.textContent = "Current goal: " + niceNames(currentGame['goal']);
