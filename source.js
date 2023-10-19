@@ -225,6 +225,9 @@ function updateInfoPanel(){
         // Append to the div and empty previous 
         box.innerHTML = "";
         box.appendChild(h4Element);
+    } else {
+        document.getElementById("current-move-box").innerHTML = '';
+        document.getElementById("current-player-box").innerHTML = '';
     }
     //Current goal
     var h4Element = document.createElement("h4");
