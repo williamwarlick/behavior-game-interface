@@ -5,6 +5,7 @@ var idSelectInactive;
 var typeSelectInactive;
 var wasPass;
 var topZ;
+var coolDown;
 
 
 function table_setup(){
@@ -66,6 +67,9 @@ function getGame(){
     //enable button
     var b = document.getElementById("goal_type_button");
     b.classList.remove("disabled");
+    //enable button
+    b = document.getElementById("game_goal_dropdown-holder");
+    b.classList.remove("disabled");
 
     //load the json for a game after load is pressed
     const id_button = document.getElementById("game_id_button");
@@ -88,6 +92,25 @@ function getGame(){
 
     var help = document.getElementById("inithelp");
     help.style.display = 'none';
+
+    //show info panel
+    updateInfoPanel()
+    panel = document.getElementById("infopanel");
+    panel.style.display = 'block';
+
+
+    //disable buttons on move
+    var button = document.getElementById("game_id_button");
+    button.style.display = 'none';
+    button = document.getElementById("goal_type_button");
+    button.style.display = 'none';
+    button = document.getElementById("random-game-button");
+    button.style.display = 'none';
+
+    //show topcard
+    updateInfoPanel()
+    panel = document.getElementById("topCard");
+    panel.style.display = 'block';
 
     // var controls = document.getElementById("ingamecontrols");
     // controls.style.display = 'block';
@@ -126,6 +149,10 @@ function cleargame(){
 }
 
 function nextMove(){
+    if (coolDown){
+        return;
+    }
+    coolDown = true;
     if (currentMove + 1 <= currentGame['total_moves']){
         move = currentMove;
         orig_id = currentGame['move_ids'][move][0];
@@ -151,21 +178,23 @@ function nextMove(){
             orig_element.style.display = 'block';
         } else {
             wasPass = true;
+            coolDown = false;
         }
-        //disable buttons on move
-        var button = document.getElementById("game_id_button");
+
+        // //enable game change button
+        // var b = document.getElementById('change-game-button');
+        // b.style.display = '';
+
+        button = document.getElementById("infopanel");
         button.style.display = 'none';
-        button = document.getElementById("goal_type_button");
-        button.style.display = 'none';
-        button = document.getElementById("random-game-button");
-        button.style.display = 'none';
-        //enable game change button
-        var b = document.getElementById('change-game-button');
-        b.style.display = '';
 
         currentMove++;
         updateInfoPanel();
+    } else {
+        var box = document.getElementById("current-move-box");
+        box.innerHTML = box.innerHTML + ' <span class="badge bg-success">Game Completed</span>';
     }
+    document.getElementById('next_move_button').addEventListener('click', nextMove);
 }
 
 function updateInfoPanel(){
@@ -174,6 +203,9 @@ function updateInfoPanel(){
         content ='Last move by: <span class="badge bg-success">Architect</span>';
     } else {
         content = 'Last move by:  <span class="badge bg-danger">Helper</span>';
+    }
+    if (wasPass){
+        content = content + ' <span class="badge bg-info">PASS</span>'
     }
     var h4Element = document.createElement("h4");
     h4Element.innerHTML = content;
@@ -185,11 +217,8 @@ function updateInfoPanel(){
 
     //Current move
     var h4Element = document.createElement("h4");
-    if (!wasPass){
-        h4Element.textContent = 'Move # ' + currentMove;
-    } else {
-        h4Element.innerHTML = 'Move # ' + currentMove + ' <span class="badge bg-info">PASS</span>';
-    }
+    h4Element.textContent = 'Move # ' + currentMove;
+    
     var box = document.getElementById("current-move-box");
     // Append to the div and empty previous 
     box.innerHTML = "";
@@ -260,40 +289,40 @@ function previousMove(){
     }
 }
 
-function gameChange(){
-    //enable game option select buttons
-   var button = document.getElementById("game_id_button");
-   button.style.display = '';
-   button = document.getElementById("goal_type_button");
-   button.style.display = '';
-   button = document.getElementById("random-game-button");
-   button.style.display = '';
-   //diable game change button
-   button = document.getElementById("change-game-button");
-   button.style.display = 'none';
-   //empty info panels
-   var box = document.getElementById("current-player-box");
-   box.innerHTML = "";
-   var box = document.getElementById("current-move-box");
-   box.innerHTML = "";
-   var box = document.getElementById("current-goal-box");
-   box.innerHTML = "";
+// function gameChange(){
+//     //enable game option select buttons
+//    var button = document.getElementById("game_id_button");
+//    button.style.display = '';
+//    button = document.getElementById("goal_type_button");
+//    button.style.display = '';
+//    button = document.getElementById("random-game-button");
+//    button.style.display = '';
+//    //diable game change button
+//    button = document.getElementById("change-game-button");
+//    button.style.display = 'none';
+//    //empty info panels
+//    var box = document.getElementById("current-player-box");
+//    box.innerHTML = "";
+//    var box = document.getElementById("current-move-box");
+//    box.innerHTML = "";
+//    var box = document.getElementById("current-goal-box");
+//    box.innerHTML = "";
 
-    // reset selection buttons
-   var box = document.getElementById("goal_type_button");
-   box.innerHTML = "Selet Goal Type ⏷";
-   var box = document.getElementById("game_id_button");
-   box.innerHTML = "Select Player ID ⏷";
+//     // reset selection buttons
+//    var box = document.getElementById("goal_type_button");
+//    box.innerHTML = "Selet Goal Type ⏷";
+//    var box = document.getElementById("game_id_button");
+//    box.innerHTML = "Select Player ID ⏷";
 
-    //hide info panel
-    panel = document.getElementById("infopanel");
-    panel.style.display = 'none';
+//     //hide info panel
+//     panel = document.getElementById("infopanel");
+//     panel.style.display = 'none';
 
-    //clear game
-    cleargame();
+//     //clear game
+//     cleargame();
 
 
-}
+// }
 
 function load_options(){
     var id_dropdown = document.getElementById("game_id_dropdown");
@@ -342,6 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //load table and options
     table_setup();
     load_options();
+    coolDown = false;
 
     //hide table
     // var t = document.getElementById("gametable");
@@ -359,7 +389,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('reset_button').addEventListener('click', getGame);
     document.getElementById('next_move_button').addEventListener('click', nextMove);
     document.getElementById('undo_move_button').addEventListener('click', previousMove);
-    document.getElementById('change-game-button').addEventListener('click', gameChange);
     document.getElementById('random-game-button').addEventListener('click', gameRandom);
 
 
@@ -400,16 +429,19 @@ function animateMove(id1, id2) {
     source_element.style.top = 0 + 'px';
 
     source_element.style.zIndex = "999";
+    console.log('x, y: ' + xT + ' ' + yT)
+
     setTimeout(function() {
         //set to destination position
         source_element.style.left = xT - xE + 'px';
         source_element.style.top = yT - yE + 'px';
-    }, 1);
+    }, 20);
     setTimeout(function () {
         //source_element.style.display = 'none';
         
         setTimeout(function() {
             //destination_element.style.display = 'block';
+            coolDown = false;
         }, 100);
       }, 750);
     
