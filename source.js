@@ -5,7 +5,7 @@ var idSelectInactive;
 var typeSelectInactive;
 var wasPass;
 var topZ;
-
+const animation_time = 0.5;
 
 function table_setup(){
     // Generate table rows and cells
@@ -161,8 +161,10 @@ function nextMove(){
             new_id = currentGame['move_ids'][move][1];
             new_element = document.getElementById(new_id);
             console.log("new_id", new_id)
-            new_element.style.backgroundColor = orig_color;
-            orig_element.style.backgroundColor = "white";
+
+            animate_move(orig_id, new_id);
+            // orig_element.style.backgroundColor = "white";
+            // new_element.style.backgroundColor = orig_color;
         } else {
             wasPass = true;
         }
@@ -186,6 +188,54 @@ function nextMove(){
     }
     document.getElementById('next_move_button').addEventListener('click', nextMove);
 }
+
+function animate_move(id1, id2){
+    var orig_color = bg_color.replace("background-color:", "").trim();
+
+    //init locations
+    var yinit = document.getElementById(id1).offsetTop;
+    var xinit = document.getElementById(id1).offsetLeft;
+
+    //final locations
+    var yfinal = document.getElementById(id2).offsetTop;
+    var xfinal = document.getElementById(id2).offsetLeft;
+
+    //create a square of orig_color in location of id1
+    square = createSquare(xinit, yinit, orig_color);
+
+    //turn id1 white
+    document.getElementById(id1).style.backgroundColor = "white";
+
+    //animate to location of id2
+    setTimeout(function() {
+        square.style.left = xfinal + "px";
+        square.style.top = yfinal + "px";
+    }, 5);
+    
+    //turn id2 orig_color
+    setTimeout(function() {
+        document.getElementById(id2).style.backgroundColor = orig_color;
+      }, 510);
+
+    //remove the tempsquare
+    setTimeout(function() {
+        document.body.removeChild(square)
+        }, 515);
+}
+
+function createSquare(x, y, color) {
+    var square = document.createElement("div");
+    square.id = "tempSquare";
+    square.style.width = "30px";
+    square.style.height = "30px";
+    square.style.position = "absolute"; 
+    square.style.left = x + "px";
+    square.style.top = y + "px";
+    square.style.zIndex = '999';
+    square.style.backgroundColor = color;
+    document.body.appendChild(square);
+    return square;
+  }
 
 function updateInfoPanel(){
     if (currentMove > 0){
