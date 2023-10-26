@@ -5,7 +5,6 @@ var idSelectInactive;
 var typeSelectInactive;
 var wasPass;
 var topZ;
-var coolDown;
 
 
 function table_setup(){
@@ -111,7 +110,6 @@ function getGame(){
     updateInfoPanel()
     panel = document.getElementById("topCard");
     panel.style.display = 'block';
-    coolDown = false;
 
     // var controls = document.getElementById("ingamecontrols");
     // controls.style.display = 'block';
@@ -151,10 +149,6 @@ function cleargame(){
 }
 
 function nextMove(){
-    if (coolDown){
-        return;
-    }
-    coolDown = true;
     if (currentMove + 1 <= currentGame['total_moves']){
         move = currentMove;
         orig_id = currentGame['move_ids'][move][0];
@@ -167,20 +161,10 @@ function nextMove(){
             new_id = currentGame['move_ids'][move][1];
             new_element = document.getElementById(new_id);
             console.log("new_id", new_id)
-            //call animation
-            animateMove(orig_id, new_id)
-            //change colors
-            setTimeout(function () {
-                
-                new_element.style.backgroundColor = orig_color;
-                orig_element.style.backgroundColor = "white";
-                //move div back to where it should be
-                undo_animation(orig_id)
-              }, 1100);
-            orig_element.style.display = 'block';
+            new_element.style.backgroundColor = orig_color;
+            orig_element.style.backgroundColor = "white";
         } else {
             wasPass = true;
-            coolDown = false;
         }
 
         // //enable game change button
@@ -275,11 +259,9 @@ function niceNames(str){
         str = str.replace("C", "to C")
         return str
     } else {return str.replace("nocolor","")}
-    
 }
 
 function previousMove(){
-    coolDown = false;
     if (currentMove  > 0 ){
         document.getElementById('next_move_button').classList.remove('disabled')
         currentMove--;
@@ -424,50 +406,50 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-function animateMove(id1, id2) {
-    var source_element = document.getElementById(id1);
-    var destination_element = document.getElementById(id2);
+// function animateMove(id1, id2) {
+//     var source_element = document.getElementById(id1);
+//     var destination_element = document.getElementById(id2);
 
-    // store the x,y coordinates of the target
-    var xT = destination_element.offsetLeft;
-    var yT = destination_element.offsetTop;
-    //destination_element.style.display = 'block';
+//     // store the x,y coordinates of the target
+//     var xT = destination_element.offsetLeft;
+//     var yT = destination_element.offsetTop;
+//     //destination_element.style.display = 'block';
 
-    // store the elements coordinate
-    var xE = source_element.offsetLeft;
-    var yE = source_element.offsetTop;
+//     // store the elements coordinate
+//     var xE = source_element.offsetLeft;
+//     var yE = source_element.offsetTop;
 
-    source_element.style.left = 0 + 'px';
-    source_element.style.top = 0 + 'px';
+//     source_element.style.left = 0 + 'px';
+//     source_element.style.top = 0 + 'px';
 
-    source_element.style.zIndex = "999";
-    console.log('x, y: ' + xT + ' ' + yT)
+//     source_element.style.zIndex = "999";
+//     console.log('x, y: ' + xT + ' ' + yT)
 
-    setTimeout(function() {
-        //set to destination position
-        source_element.style.left = xT - xE + 'px';
-        source_element.style.top = yT - yE + 'px';
-    }, 20);
-    setTimeout(function () {
-        //source_element.style.display = 'none';
+//     setTimeout(function() {
+//         //set to destination position
+//         source_element.style.left = xT - xE + 'px';
+//         source_element.style.top = yT - yE + 'px';
+//     }, 20);
+//     setTimeout(function () {
+//         //source_element.style.display = 'none';
         
-        setTimeout(function() {
-            //destination_element.style.display = 'block';
-            coolDown = false;
-        }, 100);
-      }, 750);
+//         setTimeout(function() {
+//             //destination_element.style.display = 'block';
+//             coolDown = false;
+//         }, 100);
+//       }, 750);
     
-}
+// }
 
-function undo_animation(id1){
-    var source_element = document.getElementById(id1);
-    source_element.style.display = 'none'
-    source_element.style.left = 0 + 'px';
-    source_element.style.top = 0 + 'px';
-    setTimeout(function () {
-        source_element.style.display = 'block';
-        source_element.style.zIndex = "100";
-      }, 1000);
-}
+// function undo_animation(id1){
+//     var source_element = document.getElementById(id1);
+//     source_element.style.display = 'none'
+//     source_element.style.left = 0 + 'px';
+//     source_element.style.top = 0 + 'px';
+//     setTimeout(function () {
+//         source_element.style.display = 'block';
+//         source_element.style.zIndex = "100";
+//       }, 1000);
+// }
 
 
