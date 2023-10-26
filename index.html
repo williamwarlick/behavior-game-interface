@@ -12,111 +12,113 @@
 </head>
 <body>
     <!-- largest container -->
-    <div class="container">
+    <div class="container m-1">
         <!-- header row -->
         <div class="row m-2">
-            <a style="text-decoration: none; color: #212529;" href="/"><h1 class="display-2">Collaboration Games</h1></a>
+            <a title="Return to home" style="text-decoration: none; color: #212529;" href="/"><h1 class="display-2">Collaboration Games</h1></a>
             <h2>Subtitle and more information here...</h2>
             <hr class="my-4">
         </div>
         <!-- content row -->
         <div class="row">
-            <!-- left col: instruction panel -->
-            <div class="col-sm mt-1">
-                    <div class="card p-3 bg-light helperCard">
-                      <h4>More information</h4>
-                      <p>Here we can put a variety of text about the info, or more instructions</p>
-                    </div>
-                    <div class="card p-3 mt-2 bg-light helperCard">
-                        <h4>More information</h4>
-                        <p>Here we can put a variety of text about the info, or more instructions</p>
-                      </div>
-            </div>
-
-            <!-- middle col: game panel -->
-            <div class="col-7">
-                <div class="card p-3 bg-light initCard mt-1" id="inithelp">
-                    <h4 class="display-5">Getting Started</h4>
-                    <h4>Select a <span class="font-weight-bold">Player ID</span> and <span class="font-weight-bold">Goal Type</span> below. Or, click <span class="font-weight-bold">Random Game</span>
-                       to see a randomly chosen game.</h4>
-                </div>
-                <!-- game selection controls -->
-                <div class="row">
-                    <div class="container">
-                        <div class="d-flex justify-content-center">
-                            <div style="display: none;" class="card p-3 mb-2 infoCard bg-light" id="topCard">
-                                <div id="current-goal-box">here</div>
-                                <div id="current-move-box"></div>
-                                <div id="is-finished-box"></div>
-                            </div>
-                            <div class="dropdown  m-4">
-                                <button class=" btn btn-primary btn-large" id="game_id_button">Select Player ID ⏷</button>
-                                <div class="dropdown-content" id="game_id_dropdown">
-                                </div>
-                            </div>
-            
-                            <div class="dropdown disabled m-4" id="game_goal_dropdown-holder">
-                                <button class="btn btn-primary disabled" id="goal_type_button">Select Goal Type ⏷</button>
-                                <div class="dropdown-content " id="game_goal_dropdown">
-                                </div>
-                            </div>
-                            <button id="random-game-button" type="button" style="height: fit-content;" class="btn btn-success btn-large m-4">Random Game</button>
-                        </div>   
-                    </div>
-                </div>
-                <!-- game table -->
-                <div class="row" id="gamerow" style="display: none;">
-                    <div class="d-flex justify-content-center">
-                        <table class="table" id="gametable">
-                            <tbody id="table-body">
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td colspan="3"><h4>A1</h4></td>
-                                    <td colspan="3"><h4>A2</h4></td>
-                                    <td colspan="3"><h4>B1</h4></td>
-                                    <td colspan="3"><h4>B2</h4></td>
-                                    <td colspan="3"><h4>C1</h4></td>
-                                    <td colspan="3"><h4>C2</h4></td>
-                                </tr>
-                            </tbody>
-                            <tbody>
-                                <tr>
-                                    <td colspan="6"><h3>A</h3></td>
-                                    <td colspan="6"><h3>B</h3></td>
-                                    <td colspan="6"><h3>C</h3></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="d-flex justify-content-center">
+                <!-- left col: instruction panel -->
+                <div class="col-sm mt-1">
+                        <div class="card p-3 bg-light helperCard">
+                        <h4>Viewing Collaboration Games</h4>
+                        <p>After choosing a game, use the buttons at the bottom of the screen to advance through the player moves.</p>
+                        </div>
+                        <div class="card p-3 mt-2 bg-light helperCard">
+                            <h4>More information</h4>
+                            <p>Here we can put a variety of text about the info, and more information about the game rules.</p>
+                        </div>
                 </div>
 
-                <!-- Game step controls -->
-                <div class="row" id="controlrow" style="display: none;">
-                    <div class="container mt-5">
+                <!-- middle col: game panel -->
+                <div class="col-7" style="min-width: 738;">
+                    <div class="card p-3 bg-light initCard mt-1" id="inithelp">
+                        <h4 class="display-5">Getting Started</h4>
+                        <h4>Select a <span class="font-weight-bold">Player ID</span> and <span class="font-weight-bold">Goal Type</span> below. Or, click <span class="font-weight-bold">Random Game</span>
+                        to see a randomly chosen game.</h4>
+                    </div>
+                    <!-- game selection controls -->
+                    <div class="row">
+                        <div class="container">
+                            <div class="d-flex justify-content-center">
+                                <div style="display: none;" class="card p-3 mb-2 bg-light" id="topCard">
+                                    <div id="current-goal-box">here</div>
+                                    <div id="current-player-box"></div>
+                                    <div id="is-finished-box"></div>
+                                </div>
+                                <div class="dropdown  m-4">
+                                    <button class=" btn btn-primary btn-large" id="game_id_button">Select Player ID ⏷</button>
+                                    <div class="dropdown-content" id="game_id_dropdown">
+                                    </div>
+                                </div>
+                
+                                <div class="dropdown disabled m-4" id="game_goal_dropdown-holder">
+                                    <button class="btn btn-primary disabled" id="goal_type_button">Select Goal Type ⏷</button>
+                                    <div class="dropdown-content " id="game_goal_dropdown">
+                                    </div>
+                                </div>
+                                <button id="random-game-button" type="button" style="height: fit-content;" class="btn btn-success btn-large m-4">Random Game</button>
+                            </div>   
+                        </div>
+                    </div>
+                    <!-- game table -->
+                    <div class="row" id="gamerow" style="display: none;">
                         <div class="d-flex justify-content-center">
-                            <div class="row" id="passBadgeHolder"></div>
-                            <div class="btn-group" role="group" aria-label="Button Group"  id="ingamecontrols">
-                                <button id="reset_button" type="button" class="btn btn-outline-danger">◀◀ Reset</button>
-                                <button id="undo_move_button" type="button" class="btn btn-outline-primary">◀ Undo Move</button>
-                                <button id="next_move_button" type="button" class="btn btn-outline-primary">Play Move ▶</button>
+                            <table class="table" id="gametable">
+                                <tbody id="table-body">
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="3"><h4>A1</h4></td>
+                                        <td colspan="3"><h4>A2</h4></td>
+                                        <td colspan="3"><h4>B1</h4></td>
+                                        <td colspan="3"><h4>B2</h4></td>
+                                        <td colspan="3"><h4>C1</h4></td>
+                                        <td colspan="3"><h4>C2</h4></td>
+                                    </tr>
+                                </tbody>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="6"><h3>A</h3></td>
+                                        <td colspan="6"><h3>B</h3></td>
+                                        <td colspan="6"><h3>C</h3></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Game step controls -->
+                    <div class="row" id="controlrow" style="display: none;">
+                        <div class="container mt-5">
+                            <div class="d-flex justify-content-center">
+                                <div class="row" id="passBadgeHolder"></div>
+                                <div class="btn-group" role="group" aria-label="Button Group"  id="ingamecontrols">
+                                    <button id="reset_button" type="button" class="btn btn-outline-danger">⇤ Reset</button>
+                                    <button id="undo_move_button" type="button" class="btn btn-outline-primary">◀ Undo Move</button>
+                                    <button id="next_move_button" type="button" class="btn btn-outline-primary">Play Move ▶</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- right col- game info panel -->
-            <div class="col mt-1">
-                <div class="d-flex justify-content-center">
-                    <div class="card p-4 infoCard bg-light" id="infopanel">
-                        <div id="current-game-box"></div>
-                        <hr class="my-4">
-                        <div id="current-player-box"></div>
-                        <hr class="my-4">
-                        <a id="change-game-button" href="/" style="width: 12rem;" class="btn btn-primary">Change Game</a>
-                    </div>
-                </div> 
+                <!-- right col- game info panel -->
+                <div class="col mt-1">
+                    <div class="d-flex justify-content-center">
+                        <div class="card p-4 infoCard bg-light" id="infopanel">
+                            <div id="current-game-box"></div>
+                            <hr class="my-4">
+                            <div id="current-move-box"></div>
+                            <hr class="my-4">
+                            <a id="change-game-button" href="/" style="width: 12rem;" class="btn btn-primary">Change Game</a>
+                        </div>
+                    </div> 
+                </div>
             </div>
         </div>
     </div>

@@ -122,6 +122,7 @@ function getGame(){
 }
 
 function loadgame(){
+    document.getElementById('next_move_button').classList.remove('disabled')
     //load colors into table
     var cellId = 0;
     colors = currentGame.config
@@ -192,8 +193,12 @@ function nextMove(){
         currentMove++;
         updateInfoPanel();
     } else {
+        //in case game is over
+        //add game completed badge
         var box = document.getElementById("current-move-box");
         box.innerHTML = box.innerHTML + ' <span class="badge bg-success">Game Completed</span>';
+        //grey out next_move button
+        document.getElementById('next_move_button').classList.add('disabled');
     }
     document.getElementById('next_move_button').addEventListener('click', nextMove);
 }
@@ -274,7 +279,9 @@ function niceNames(str){
 }
 
 function previousMove(){
+    coolDown = false;
     if (currentMove  > 0 ){
+        document.getElementById('next_move_button').classList.remove('disabled')
         currentMove--;
         move = currentMove;
         orig_id = currentGame['move_ids'][move][1];
