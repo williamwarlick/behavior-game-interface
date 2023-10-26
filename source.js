@@ -5,8 +5,7 @@ var idSelectInactive;
 var typeSelectInactive;
 var wasPass;
 var topZ;
-var coolDown;
-
+const animation_time = 0.5;
 
 function table_setup(){
     // Generate table rows and cells
@@ -111,7 +110,6 @@ function getGame(){
     updateInfoPanel()
     panel = document.getElementById("topCard");
     panel.style.display = 'block';
-    coolDown = false;
 
     // var controls = document.getElementById("ingamecontrols");
     // controls.style.display = 'block';
@@ -151,10 +149,6 @@ function cleargame(){
 }
 
 function nextMove(){
-    if (coolDown){
-        return;
-    }
-    coolDown = true;
     if (currentMove + 1 <= currentGame['total_moves']){
         move = currentMove;
         orig_id = currentGame['move_ids'][move][0];
@@ -167,20 +161,12 @@ function nextMove(){
             new_id = currentGame['move_ids'][move][1];
             new_element = document.getElementById(new_id);
             console.log("new_id", new_id)
-            //call animation
-            animateMove(orig_id, new_id)
-            //change colors
-            setTimeout(function () {
-                
-                new_element.style.backgroundColor = orig_color;
-                orig_element.style.backgroundColor = "white";
-                //move div back to where it should be
-                undo_animation(orig_id)
-              }, 1100);
-            orig_element.style.display = 'block';
+
+            animate_move(orig_id, new_id);
+            // orig_element.style.backgroundColor = "white";
+            // new_element.style.backgroundColor = orig_color;
         } else {
             wasPass = true;
-            coolDown = false;
         }
 
         // //enable game change button
@@ -202,6 +188,54 @@ function nextMove(){
     }
     document.getElementById('next_move_button').addEventListener('click', nextMove);
 }
+
+function animate_move(id1, id2){
+    var orig_color = bg_color.replace("background-color:", "").trim();
+
+    //init locations
+    var yinit = document.getElementById(id1).offsetTop;
+    var xinit = document.getElementById(id1).offsetLeft;
+
+    //final locations
+    var yfinal = document.getElementById(id2).offsetTop;
+    var xfinal = document.getElementById(id2).offsetLeft;
+
+    //create a square of orig_color in location of id1
+    square = createSquare(xinit, yinit, orig_color);
+
+    //turn id1 white
+    document.getElementById(id1).style.backgroundColor = "white";
+
+    //animate to location of id2
+    setTimeout(function() {
+        square.style.left = xfinal + "px";
+        square.style.top = yfinal + "px";
+    }, 5);
+    
+    //turn id2 orig_color
+    setTimeout(function() {
+        document.getElementById(id2).style.backgroundColor = orig_color;
+      }, 510);
+
+    //remove the tempsquare
+    setTimeout(function() {
+        document.body.removeChild(square)
+        }, 515);
+}
+
+function createSquare(x, y, color) {
+    var square = document.createElement("div");
+    square.id = "tempSquare";
+    square.style.width = "30px";
+    square.style.height = "30px";
+    square.style.position = "absolute"; 
+    square.style.left = x + "px";
+    square.style.top = y + "px";
+    square.style.zIndex = '999';
+    square.style.backgroundColor = color;
+    document.body.appendChild(square);
+    return square;
+  }
 
 function updateInfoPanel(){
     if (currentMove > 0){
@@ -275,11 +309,9 @@ function niceNames(str){
         str = str.replace("C", "to C")
         return str
     } else {return str.replace("nocolor","")}
-    
 }
 
 function previousMove(){
-    coolDown = false;
     if (currentMove  > 0 ){
         document.getElementById('next_move_button').classList.remove('disabled')
         currentMove--;
@@ -424,50 +456,50 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-function animateMove(id1, id2) {
-    var source_element = document.getElementById(id1);
-    var destination_element = document.getElementById(id2);
+// function animateMove(id1, id2) {
+//     var source_element = document.getElementById(id1);
+//     var destination_element = document.getElementById(id2);
 
-    // store the x,y coordinates of the target
-    var xT = destination_element.offsetLeft;
-    var yT = destination_element.offsetTop;
-    //destination_element.style.display = 'block';
+//     // store the x,y coordinates of the target
+//     var xT = destination_element.offsetLeft;
+//     var yT = destination_element.offsetTop;
+//     //destination_element.style.display = 'block';
 
-    // store the elements coordinate
-    var xE = source_element.offsetLeft;
-    var yE = source_element.offsetTop;
+//     // store the elements coordinate
+//     var xE = source_element.offsetLeft;
+//     var yE = source_element.offsetTop;
 
-    source_element.style.left = 0 + 'px';
-    source_element.style.top = 0 + 'px';
+//     source_element.style.left = 0 + 'px';
+//     source_element.style.top = 0 + 'px';
 
-    source_element.style.zIndex = "999";
-    console.log('x, y: ' + xT + ' ' + yT)
+//     source_element.style.zIndex = "999";
+//     console.log('x, y: ' + xT + ' ' + yT)
 
-    setTimeout(function() {
-        //set to destination position
-        source_element.style.left = xT - xE + 'px';
-        source_element.style.top = yT - yE + 'px';
-    }, 20);
-    setTimeout(function () {
-        //source_element.style.display = 'none';
+//     setTimeout(function() {
+//         //set to destination position
+//         source_element.style.left = xT - xE + 'px';
+//         source_element.style.top = yT - yE + 'px';
+//     }, 20);
+//     setTimeout(function () {
+//         //source_element.style.display = 'none';
         
-        setTimeout(function() {
-            //destination_element.style.display = 'block';
-            coolDown = false;
-        }, 100);
-      }, 750);
+//         setTimeout(function() {
+//             //destination_element.style.display = 'block';
+//             coolDown = false;
+//         }, 100);
+//       }, 750);
     
-}
+// }
 
-function undo_animation(id1){
-    var source_element = document.getElementById(id1);
-    source_element.style.display = 'none'
-    source_element.style.left = 0 + 'px';
-    source_element.style.top = 0 + 'px';
-    setTimeout(function () {
-        source_element.style.display = 'block';
-        source_element.style.zIndex = "100";
-      }, 1000);
-}
+// function undo_animation(id1){
+//     var source_element = document.getElementById(id1);
+//     source_element.style.display = 'none'
+//     source_element.style.left = 0 + 'px';
+//     source_element.style.top = 0 + 'px';
+//     setTimeout(function () {
+//         source_element.style.display = 'block';
+//         source_element.style.zIndex = "100";
+//       }, 1000);
+// }
 
 
