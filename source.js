@@ -178,6 +178,14 @@ function nextMove(){
 
         currentMove++;
         updateInfoPanel();
+        if (currentMove >= currentGame['total_moves']){
+            //in case game is over
+            //add game completed badge
+            var box = document.getElementById("current-move-box");
+            box.innerHTML = box.innerHTML + ' <span class="badge bg-success">Game Completed</span>';
+            //grey out next_move button
+            document.getElementById('next_move_button').classList.add('disabled');
+        }
     } else {
         //in case game is over
         //add game completed badge
@@ -305,7 +313,7 @@ function niceNames(str){
         return str.replace("nocolor", '')
     } else if (str.includes("move")){
         str = str.replace("A", "to A")
-        str = str.replace("B", "to A")
+        str = str.replace("B", "to B")
         str = str.replace("C", "to C")
         return str
     } else {return str.replace("nocolor","")}
