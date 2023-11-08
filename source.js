@@ -6,6 +6,7 @@ var typeSelectInactive;
 var wasPass;
 var topZ;
 const animation_time = 0.5;
+var isDone;
 
 function table_setup(){
     // Generate table rows and cells
@@ -110,6 +111,7 @@ function getGame(){
     updateInfoPanel()
     panel = document.getElementById("topCard");
     panel.style.display = 'block';
+    isDone = false;
 
     // var controls = document.getElementById("ingamecontrols");
     // controls.style.display = 'block';
@@ -181,18 +183,20 @@ function nextMove(){
         if (currentMove >= currentGame['total_moves']){
             //in case game is over
             //add game completed badge
-            var box = document.getElementById("current-move-box");
+            var box = document.getElementById("current-player-box");
             box.innerHTML = box.innerHTML + ' <span class="badge bg-success">Game Completed</span>';
             //grey out next_move button
             document.getElementById('next_move_button').classList.add('disabled');
+            isDone = true;
         }
     } else {
         //in case game is over
         //add game completed badge
-        var box = document.getElementById("current-move-box");
+        var box = document.getElementById("current-player-box");
         box.innerHTML = box.innerHTML + ' <span class="badge bg-success">Game Completed</span>';
         //grey out next_move button
         document.getElementById('next_move_button').classList.add('disabled');
+        isDone = true;
     }
     document.getElementById('next_move_button').addEventListener('click', nextMove);
 }
@@ -341,6 +345,18 @@ function previousMove(){
     }
 }
 
+function playAll(){
+    function doLoop() {         
+        setTimeout(function() {   
+            nextMove()
+            if (!isDone) {      
+            doLoop();             
+            }
+        }, 800)
+    }
+    doLoop();   
+}
+
 // function gameChange(){
 //     //enable game option select buttons
 //    var button = document.getElementById("game_id_button");
@@ -442,6 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('next_move_button').addEventListener('click', nextMove);
     document.getElementById('undo_move_button').addEventListener('click', previousMove);
     document.getElementById('random-game-button').addEventListener('click', gameRandom);
+    document.getElementById('play-all-button').addEventListener('click', playAll);
 
 
     const optionIdElements = document.querySelectorAll(".option_id_item");
