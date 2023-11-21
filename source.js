@@ -194,6 +194,11 @@ function nextMove(){
             //grey out next_move button
             document.getElementById('next_move_button').classList.add('disabled');
             isDone = true;
+            //re-enable buttons
+            document.getElementById('undo_move_button').classList.remove('disabled');
+            document.getElementById('reset_button').classList.remove('disabled');
+            isPlaythrough = false;
+            document.getElementById("play-all-button").textContent = "Play All Moves⇥";
         }
     } else {
         //in case game is over
@@ -203,6 +208,11 @@ function nextMove(){
         //grey out next_move button
         document.getElementById('next_move_button').classList.add('disabled');
         isDone = true;
+        //re-enable buttons
+        document.getElementById('undo_move_button').classList.remove('disabled');
+        document.getElementById('reset_button').classList.remove('disabled');
+        isPlaythrough = false;
+        document.getElementById("play-all-button").textContent = "Play All Moves⇥";
     }
     document.getElementById('next_move_button').addEventListener('click', nextMove);
 }
@@ -353,22 +363,35 @@ function previousMove(){
 
 //play all moves sequentially
 function playAll(){
-    //set bool for button disabling
+    //check if function is already running and stop it if so
+    if (isPlaythrough){
+        isDone = true;
+        setTimeout(function() {
+            document.getElementById('undo_move_button').classList.remove('disabled');
+            document.getElementById('reset_button').classList.remove('disabled');
+            document.getElementById('next_move_button').classList.remove('disabled');
+            isPlaythrough = false;
+            isDone = false;
+            //change button to play
+            document.getElementById("play-all-button").textContent = "Play All Moves⇥";
+          }, 810);
+        return
+    }
+    // change button to stop
+    document.getElementById("play-all-button").textContent = "STOP ◼";
+
     isPlaythrough = true;
     function doLoop() {         
         setTimeout(function() {   
+            isPlaythrough = true;
             nextMove()
             if (!isDone) {      
             doLoop();             
             }
+            
         }, 800)
     }
     doLoop();   
-    //re-enable buttons
-    document.getElementById('next_move_button').classList.remove('disabled');
-    document.getElementById('undo_move_button').classList.remove('disabled');
-    document.getElementById('reset_button').classList.remove('disabled');
-    isPlaythrough = false;
 }
 
 // function gameChange(){
