@@ -7,6 +7,7 @@ var wasPass;
 var topZ;
 const animation_time = 0.5;
 var isDone;
+var isPlaythrough;
 
 function table_setup(){
     // Generate table rows and cells
@@ -151,6 +152,11 @@ function cleargame(){
 }
 
 function nextMove(){
+    if (isPlaythrough){
+        document.getElementById('next_move_button').classList.add('disabled');
+        document.getElementById('undo_move_button').classList.add('disabled');
+        document.getElementById('reset_button').classList.add('disabled');
+    }
     if (currentMove + 1 <= currentGame['total_moves']){
         move = currentMove;
         orig_id = currentGame['move_ids'][move][0];
@@ -345,7 +351,10 @@ function previousMove(){
     }
 }
 
+//play all moves sequentially
 function playAll(){
+    //set bool for button disabling
+    isPlaythrough = true;
     function doLoop() {         
         setTimeout(function() {   
             nextMove()
@@ -355,6 +364,11 @@ function playAll(){
         }, 800)
     }
     doLoop();   
+    //re-enable buttons
+    document.getElementById('next_move_button').classList.remove('disabled');
+    document.getElementById('undo_move_button').classList.remove('disabled');
+    document.getElementById('reset_button').classList.remove('disabled');
+    isPlaythrough = false;
 }
 
 // function gameChange(){
