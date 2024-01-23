@@ -18,6 +18,7 @@
 
 #topCard{
   min-height: 115px;
+  
 }
 
 .table th, .table td {
@@ -27,6 +28,11 @@
     padding-left: 5px;
     padding-right: 5px;
     padding-bottom: 1px;
+}
+
+/* Add vertical lines left of first colum */
+#gametable {
+  border-left: 3px solid #ccc;
 }
 
 /* Add vertical lines between each set of 3 columns */
@@ -118,4 +124,10 @@
 
 #tempSquare {
   transition: all 0.5s ease; 
+}
+
+#current-player-box {
+  
+  justify-content: center; /* Center content horizontally */
+  text-align: center;      /* Center text if it wraps on multiple lines */
 }

@@ -1,6 +1,8 @@
 const tableBody = document.getElementById("table-body");
 var currentGame;
 var currentMove;
+var mode = 'visualize'; // default mode
+var nMoves =0; // number of moves for experiment mode
 var idSelectInactive;
 var typeSelectInactive;
 var wasPass;
@@ -8,6 +10,18 @@ var topZ;
 const animation_time = 0.5;
 var isDone;
 var isPlaythrough;
+
+function setMode(selectedMode) {
+    mode = selectedMode;
+    if(mode === 'experiment') {
+        nMoves = 4;
+        // nMoves = Math.floor(Math.random() * currentGame['total_moves']); // random number of moves
+    }
+    console.log("Mode is: " + mode)
+    ModeSelection = document.getElementById("mode_selection_button");
+    ModeSelection.textContent = "Mode: " + mode;
+    getGame(); // reload the game
+}
 
 function table_setup(){
     // Generate table rows and cells
@@ -77,7 +91,11 @@ function getGame(){
     const type_button = document.getElementById("goal_type_button");
     var id = id_button.textContent;
     var type = type_button.textContent;
-    id_games = data[id]
+    // Data is from expX_data_js. Dict with keys as user ids and values as list of games
+    // Each game is a dict with keys: config, goal, goal_type, id, move_ids, total_moves
+    // cant figure out why but file seems to exp1  data has to be named data_js.js ? 
+    id_games = data_exp1[id]
+    console.log("data[id] is:", id_games)
     for (const g of id_games) {
         if (g.goal_type === type) {
             currentGame = g;
@@ -111,7 +129,7 @@ function getGame(){
     //show topcard
     updateInfoPanel()
     panel = document.getElementById("topCard");
-    panel.style.display = 'block';
+    panel.style.display = 'flex';
     isDone = false;
 
     // var controls = document.getElementById("ingamecontrols");
@@ -139,6 +157,7 @@ function loadgame(){
 
     var cRow = document.getElementById("controlrow")
     cRow.style.display = 'flex';
+    cRow.style.display = 'center';
 
 }
  //load white cells
@@ -152,6 +171,8 @@ function cleargame(){
 }
 
 function nextMove(){
+    console.log("Nmoves: " + nMoves)
+    console.log("Current Move: " + currentMove)
     if (isPlaythrough){
         document.getElementById('next_move_button').classList.add('disabled');
         document.getElementById('undo_move_button').classList.add('disabled');
@@ -296,33 +317,92 @@ function updateInfoPanel(){
         document.getElementById("current-move-box").innerHTML = '';
         document.getElementById("current-player-box").innerHTML = '';
     }
-    //Current goal
+
+    // Current goal
     var h4Element = document.createElement("h4");
-    h4Element.textContent = "Current goal: " + niceNames(currentGame['goal']);
     var box = document.getElementById("current-goal-box");
 
-    // Append to the div and empty previous 
-    box.innerHTML = "";
-    box.appendChild(h4Element);
+    if (mode === 'visualize'){
+        h4Element.textContent = "Current goal: " + niceNames(currentGame['goal']);
+        box.innerHTML = ""; // Clear existing content
+        box.appendChild(h4Element);
+    } else {
+        // In experiment mode 
+        h4Element.textContent = "Watch the blocks and consider what the Goal is?";
 
-    //Current game
+        if (currentMove >= nMoves) {
+            var b = document.getElementById('next_move_button');
+            b.disabled = true;
+            console.log("Disabled!");
+
+          
+
+        // Create the input group container
+        var inputGroup = document.createElement("div");
+        inputGroup.className = "input-group mb-3"; // Bootstrap class for input groups
+
+        // Create and append the input element
+        var inputBox = document.createElement("input");
+        inputBox.type = "text";
+        inputBox.id = "goalInput";
+        inputBox.placeholder = "Explain the goal";
+        inputBox.className = "form-control"; // Bootstrap class for form control
+        inputGroup.appendChild(inputBox);
+
+        // Create and append the submit button
+        var submitButton = document.createElement("button");
+        submitButton.id = "submitGoal";
+        submitButton.textContent = "Submit";
+        submitButton.onclick = submitGoal;
+        submitButton.className = "btn btn-primary"; // Bootstrap class for buttons
+        inputGroup.appendChild(submitButton);
+
+        box.innerHTML = ""; // Clear existing content
+        box.appendChild(h4Element); // Append the current goal text
+        box.appendChild(inputGroup); // Append the input group with input box and submit button
+
+
+
+        } else {
+            var b = document.getElementById('next_move_button');
+            b.disabled = false;
+            box.innerHTML = ""; // Clear existing content
+            box.appendChild(h4Element); // Append the current goal text
+        }
+    }
+
+    // Current game
     var newh4Element = document.createElement("h4");
     newh4Element.textContent = "Current ID: " + (currentGame['id']);
     var newbox = document.getElementById("current-game-box");
 
-    // Append to the div and empty previous 
-    newbox.innerHTML = "";
-    newbox.appendChild(newh4Element);
+    newbox.innerHTML = ""; // Clear existing content
+    newbox.appendChild(newh4Element); // Append the current game text
 
-    // Append to the div and empty previous 
-    box.innerHTML = "";
-    box.appendChild(h4Element);
-
-    //show info panel
+    // Show info panel
     panel = document.getElementById("infopanel");
     panel.style.display = 'block';
-
 }
+
+function submitGoal() {
+    var guessedGoal = document.getElementById('goalInput').value;
+    // Placeholder for the response to be send to DB 
+    console.log("Submitting guessed goal: " + guessedGoal);
+    // Display confirmation message
+    var confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+    confirmationModal.show();
+    
+    // Set a timeout for the modal to hide
+    setTimeout(function() {
+        confirmationModal.hide();
+        window.location.href = 'index.html';
+    }, 1500);
+    // Redirect to the index page
+    
+   
+}
+
+
 
 // make the goal names more readable
 function niceNames(str){
@@ -471,8 +551,22 @@ function load_options(){
     }
 }
 
+// for locally developing
+function setChangeGameButtonUrl() {
+    var changeGameButton = document.getElementById('change-game-button');
+    var hostname = window.location.hostname;
+    console.log(hostname)
+
+    if(hostname === '127.0.0.1') {
+        changeGameButton.href = 'http://127.0.0.1:5500/index.html';
+    } else {
+        changeGameButton.href = 'https://s-omas.github.io/behavior-game-interface/';
+    }
+}
+
 //on load do this
 document.addEventListener('DOMContentLoaded', function () {
+    setChangeGameButtonUrl();
     //load table and options
     table_setup();
     load_options();
@@ -483,13 +577,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // t.style.display = 'none';
 
     //hide info panel
-    panel = document.getElementById("infopanel");
-    panel.style.display = 'none';
+    // panel = document.getElementById("infopanel");
+    // panel.style.display = 'none';
 
     //hide controls
     // var controls = document.getElementById("ingamecontrols");
     // controls.style.display = 'block';
+   
 
+    document.getElementById('visualize_mode').addEventListener('click', () => setMode('visualize'));
+    document.getElementById('experiment_mode').addEventListener('click', () => setMode('experiment'));
 
     document.getElementById('reset_button').addEventListener('click', getGame);
     document.getElementById('next_move_button').addEventListener('click', nextMove);
