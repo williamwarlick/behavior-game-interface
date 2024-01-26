@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# macOS system files
+.DS_Store
+
+
+# Optional IDE files
+.idea/
+.vscode/
+
+# env folder
+myenv/ 

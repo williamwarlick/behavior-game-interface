@@ -2,7 +2,7 @@ const tableBody = document.getElementById("table-body");
 var currentGame;
 var currentMove;
 var mode = 'visualize'; // default mode
-var nMoves =0; // number of moves for experiment mode
+var nMoves = 0; // number of moves for experiment mode
 var idSelectInactive;
 var typeSelectInactive;
 var wasPass;
@@ -94,8 +94,10 @@ function getGame(){
     // Data is from expX_data_js. Dict with keys as user ids and values as list of games
     // Each game is a dict with keys: config, goal, goal_type, id, move_ids, total_moves
     // cant figure out why but file seems to exp1  data has to be named data_js.js ? 
-    id_games = data_exp1[id]
+    // id games relies on options.js 
+    id_games = data_exp2[id]
     console.log("data[id] is:", id_games)
+    
     for (const g of id_games) {
         if (g.goal_type === type) {
             currentGame = g;
