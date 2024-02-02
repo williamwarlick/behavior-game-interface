@@ -141,7 +141,7 @@ for _, row in grouped.iterrows():
         config = []
     
 
-    total_moves = sum(len(moves) for moves in row['combinedToAndFrom'])
+    total_moves = sum(len(moves) // 2 for moves in row['combinedToAndFrom'])
 
     game_dict = {
         "id": player_id,
@@ -150,7 +150,7 @@ for _, row in grouped.iterrows():
         "config": config,
         "goal_optimal": 100,
         "goal": goal,
-        "total_moves": total_moves, 
+        "total_moves": total_moves , 
 
         # check if this works for all types
         "goal_type": goal.split()[0],
