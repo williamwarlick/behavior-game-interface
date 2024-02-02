@@ -291,14 +291,14 @@ function createSquare(x, y, color) {
 function updateInfoPanel(){
     if (currentMove > 0){
         // Current player
-        if (currentMove % 2 == 1){
-            content ='Last move by: <span class="badge bg-success">Architect</span>';
-        } else {
-            content = 'Last move by:  <span class="badge bg-danger">Helper</span>';
-        }
-        if (wasPass){
-            content = content + ' <span class="badge bg-info">PASS</span>'
-        }
+        // if (currentMove % 2 == 1){
+        content ='Last move by: <span class="badge bg-success">Architect</span>';
+        // } else {
+        //     content = 'Last move by:  <span class="badge bg-danger">Helper</span>';
+        // }
+        // if (wasPass){
+        //     content = content + ' <span class="badge bg-info">PASS</span>'
+        // }
         var h4Element = document.createElement("h4");
         h4Element.innerHTML = content;
         var box = document.getElementById("current-player-box");
@@ -325,7 +325,7 @@ function updateInfoPanel(){
     var box = document.getElementById("current-goal-box");
 
     if (mode === 'visualize'){
-        h4Element.textContent = "Current goal: " + niceNames(currentGame['goal']);
+        h4Element.textContent = "Goal: " + niceNames(currentGame['goal']);
         box.innerHTML = ""; // Clear existing content
         box.appendChild(h4Element);
     } else {
@@ -375,7 +375,7 @@ function updateInfoPanel(){
 
     // Current game
     var newh4Element = document.createElement("h4");
-    newh4Element.textContent = "Current ID: " + (currentGame['id']);
+    newh4Element.textContent = "Game ID: " + (currentGame['id']);
     var newbox = document.getElementById("current-game-box");
 
     newbox.innerHTML = ""; // Clear existing content
@@ -587,8 +587,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // controls.style.display = 'block';
    
 
-    document.getElementById('visualize_mode').addEventListener('click', () => setMode('visualize'));
-    document.getElementById('experiment_mode').addEventListener('click', () => setMode('experiment'));
+    // document.getElementById('visualize_mode').addEventListener('click', () => setMode('visualize'));
+    // document.getElementById('experiment_mode').addEventListener('click', () => setMode('experiment'));
 
     document.getElementById('reset_button').addEventListener('click', getGame);
     document.getElementById('next_move_button').addEventListener('click', nextMove);
