@@ -98,7 +98,7 @@ configs = {
 
 
 # Load the Excel file
-file_path = 'exp2_data.xlsx'
+file_path = 'scripts/e2_data.xlsx'
 df = pd.read_excel(file_path) #, nrows=150
 
 df['combinedToAndFrom'] = df.apply(lambda x: [int(coord.strip()) for coord in x['combinedToAndFrom'][1:-1].split(',')], axis=1)
@@ -114,6 +114,9 @@ grouped = df.groupby(['playerId', 'goal']).agg({
 
 result_dict = {}
 for _, row in grouped.iterrows():
+    if row['importId'] == None:
+        continue
+
     try:
         # Attempt to convert playerId to integer and then to string
         player_id = str(int(row['playerId']))
@@ -132,19 +135,22 @@ for _, row in grouped.iterrows():
     if player_id not in result_dict:
         result_dict[player_id] = []
 
-    try: 
+    try:
         config = configs.get(str(import_id))
     except:
-        config = [] 
+        config = []
+    
+
+    total_moves = sum(len(moves) for moves in row['combinedToAndFrom'])
 
     game_dict = {
         "id": player_id,
         "importId": import_id,  
         
         "config": config,
-        "goal_optimal": 13,
+        "goal_optimal": 100,
         "goal": goal,
-        "total_moves": 13, 
+        "total_moves": total_moves, 
 
         # check if this works for all types
         "goal_type": goal.split()[0],
